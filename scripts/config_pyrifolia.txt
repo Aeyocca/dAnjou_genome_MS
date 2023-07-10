@@ -1,0 +1,37 @@
+Project:
+-----------------------
+Project name          = pyrifolia
+Type                  = chloro
+Genome Range          = 120000-220000
+K-mer                 = 33
+Max memory            = 
+Extended log          = 0
+Save assembled reads  = no
+Seed Input            = /cluster/home/ayocca/01_Rosaceae_Evo/Pyrus/chloro/data/Seed_RUBP_cp.fasta
+Extend seed directly  = no
+Reference sequence    = 
+Variance detection    = 
+Chloroplast sequence  = /cluster/home/ayocca/01_Rosaceae_Evo/Pyrus/chloro/data/Pyrus_communis_chloroplast.fasta
+
+Dataset 1:
+-----------------------
+Read Length           = 101
+Insert size           = 300
+Platform              = illumina
+Single/Paired         = PE
+Combined reads        = 
+Forward reads         = /cluster/home/ayocca/01_Rosaceae_Evo/Pyrus/chloro/data/DRR385062_sub_1.fastq
+Reverse reads         = /cluster/home/ayocca/01_Rosaceae_Evo/Pyrus/chloro/data/DRR385062_sub_2.fastq
+Store Hash            =
+
+Heteroplasmy:
+-----------------------
+MAF                   = 
+HP exclude list       = 
+PCR-free              = 
+
+Optional:
+-----------------------
+Insert size auto      = yes
+Use Quality Scores    = no
+Output path           = 
