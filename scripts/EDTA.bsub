@@ -1,0 +1,23 @@
+#!/bin/bash
+#BSUB -J EDTA
+#BSUB -e /cluster/home/ayocca/eo_files/EDTA-%J.e
+#BSUB -o /cluster/home/ayocca/eo_files/EDTA-%J.o
+#BSUB -W 24:00
+#BSUB -M 20G
+#BSUB -R "span[hosts=1] rusage[mem=20G]"
+#BSUB -n 11
+#BSUB -q c7highmem
+
+#other BSUB -R rusage[mem=1000M]
+
+wkdir=/cluster/home/ayocca/01_Rosaceae_Evo/Pyrus/EDTA/chr10A/
+
+cd $wkdir
+
+source /cluster/home/ayocca/.bashrc
+conda activate EDTA
+
+genome=/cluster/home/ayocca/01_Rosaceae_Evo/Pyrus/EDTA/genome/chr10A.fasta
+
+perl ~/EDTA/EDTA.pl --genome $genome \
+--overwrite 1 --sensitive 1 --anno 1 --evaluate 1 --threads 10

@@ -1,0 +1,54 @@
+#!/bin/bash
+#BSUB -J map_hic_pyrus_R1_hap1_v1
+#BSUB -e /cluster/home/ayocca/eo_files/map_hic_pyrus_R1_hap1_v1-%J.e
+#BSUB -o /cluster/home/ayocca/eo_files/map_hic_pyrus_R1_hap1_v1-%J.o
+#BSUB -W 48:00
+#BSUB -M 100G
+#BSUB -R "span[hosts=1] rusage[mem=1G]"
+#BSUB -n 51
+#BSUB -q plant
+
+wkdir="/cluster/home/ayocca/01_Rosaceae_Evo/Pyrus/"
+
+cd $wkdir
+
+echo "Hello"
+
+source ~/.bash_profile
+conda activate genome_tools
+
+#bwa index on cmd line
+#bwa index -a bwtsw -p Pyrus_PB_35x_Omni_v1.asm.hic.hap1.p_ctg.50kb.racon.bwa_idx Pyrus_PB_35x_Omni_v1.asm.hic.hap1.p_ctg.50kb.racon.fasta
+#took 10 minutes
+
+CPU=50
+READ_FILE="/cluster/home/ayocca/01_Rosaceae_Evo/Pyrus/Pyrus_OmniC_35x_R1.fastq"
+BWA_IDX="Pyrus_hap1_v1.rename_bwa_idx"
+RAW_OUT="Pyrus_hic_mapped_raw_R1_hap1_v1.bam"
+FILT_OUT="Pyrus_hic_mapped_filt_R1_hap1_v1.bam"
+
+bwa mem -t $CPU $BWA_IDX $IN_DIR/$READ_FILE \
+| samtools view -@ $CPU -Sb \
+- > $RAW_OUT
+
+#echo "### Step 2.A: Filter 5' end (1st)"
+samtools view -h $RAW_OUT | \
+perl /cluster/home/ayocca/mapping_pipeline-master/filter_five_end.pl | \
+samtools view \
+-Sb - > $FILT_OUT
+
+#After filtering, we pair the filtered single-end Hi-C reads using “two_read_bam_combiner.pl,” which
+#outputs a sorted, mapping quality filtered, paired-end BAM file. We then add read groups to this BAM
+#file using Picard Tools.
+
+#this has to go in a separate script
+#echo "### Step 3A: Pair reads & mapping quality filter"
+#perl $COMBINER $FILT_DIR/$SRA\_1.bam $FILT_DIR/$SRA\_2.bam $SAMTOOLS
+#$MAPQ_FILTER | $SAMTOOLS view -bS -t $FAIDX - | $SAMTOOLS sort -@ $CPU -o
+#$TMP_DIR/$SRA.bam -
+
+#echo "### Step 3.B: Add read group"
+#java -Xmx4G -Djava.io.tmpdir=temp/ -jar $PICARD AddOrReplaceReadGroups
+#INPUT=$TMP_DIR/$SRA.bam OUTPUT=$PAIR_DIR/$SRA.bam ID=$SRA LB=$SRA SM=$LABEL
+#PL=ILLUMINA PU=none
+
